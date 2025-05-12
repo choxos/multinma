@@ -24,6 +24,10 @@
 #'   fitted, should the predictive distribution for relative effects in a new
 #'   study be returned? Default `FALSE`.
 #' @param summary Logical, calculate posterior summaries? Default `TRUE`.
+#' @param reverse_contrasts Logical, should the direction of contrasts be reversed? 
+#'   If `FALSE` (default), contrasts are presented as "Treatment B vs. Treatment A". 
+#'   If `TRUE`, contrasts are presented as "Treatment A vs. Treatment B". 
+#'   Only used if `all_contrasts = TRUE`.
 #'
 #' @return A [nma_summary] object if `summary = TRUE`, otherwise a list
 #'   containing a 3D MCMC array of samples and (for regression models) a data
@@ -84,10 +88,13 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
                              all_contrasts = FALSE, trt_ref = NULL,
                              probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
                              predictive_distribution = FALSE,
+                             reverse_contrasts = FALSE,
                              summary = TRUE) {
-
   # Checks
   if (!inherits(x, "stan_nma")) abort("Expecting a `stan_nma` object, as returned by nma().")
+
+  if (!rlang::is_bool(reverse_contrasts))
+    abort("`reverse_contrasts` should be TRUE or FALSE.")
 
   if (!is.null(newdata)) {
     if (!is.data.frame(newdata)) abort("`newdata` is not a data frame.")
@@ -155,12 +162,18 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
     trta <- x$network$treatments[1]
 
     if (all_contrasts) {
-      re_array <- make_all_contrasts(re_array, trt_ref = nrt)
+      re_array <- make_all_contrasts(re_array, trt_ref = nrt, reverse_contrasts = reverse_contrasts)
 
       contrs <- utils::combn(x$network$treatments, 2)
       trtb <- contrs[2, ]
       trta <- contrs[1, ]
-
+      
+      # Swap trtb and trta if using reverse_contrasts
+      if (reverse_contrasts) {
+        temp <- trtb
+        trtb <- trta
+        trta <- temp
+      }
     } else if (!is.null(trt_ref) && trt_ref != nrt) {
       d_ref <- re_array[ , , paste0("d[", trt_ref, "]"), drop = FALSE]
       re_array <- sweep(re_array, 1:2, d_ref, FUN = "-")
@@ -448,18 +461,27 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
                                                             parameters = paste(rep(1:dplyr::n_distinct(dat_studies$.study), each = n_contr),
                                                                                rep(1:n_contr, times = dplyr::n_distinct(dat_studies$.study)))))
         for (j in unique(dat_studies$.study)) {
-          j_select <- dat_studies$.study == j
-          j_select_all <- rep(unique(dat_studies$.study) == j, each = n_contr)
-          j_contrs_all <- make_all_contrasts(re_array[ , , j_select, drop = FALSE], trt_ref = nrt)
-          re_array_all[ , , j_select_all] <- j_contrs_all
-          dimnames(re_array_all)[[3]][j_select_all] <- dimnames(j_contrs_all)[[3]]
-        }
-        re_array <- re_array_all
-
-        contrs <- utils::combn(x$network$treatments, 2)
-        trtb <- contrs[2, ]
-        trta <- contrs[1, ]
+        j_select <- dat_studies$.study == j
+        j_select_all <- rep(unique(dat_studies$.study) == j, each = n_contr)
+        j_contrs_all <- make_all_contrasts(re_array[ , , j_select, drop = FALSE], 
+                                         trt_ref = nrt, 
+                                         reverse_contrasts = reverse_contrasts)
+        re_array_all[ , , j_select_all] <- j_contrs_all
+        dimnames(re_array_all)[[3]][j_select_all] <- dimnames(j_contrs_all)[[3]]
       }
+      re_array <- re_array_all
+
+      contrs <- utils::combn(x$network$treatments, 2)
+      trtb <- contrs[2, ]
+      trta <- contrs[1, ]
+      
+      # Swap trtb and trta if using reverse_contrasts
+      if (reverse_contrasts) {
+        temp <- trtb
+        trtb <- trta
+        trta <- temp
+      }
+    }
 
       # Add in study names to parameters
       parnames <- stringr::str_extract(dimnames(re_array)[[3]], "(?<=^d\\[)(.+)(?=\\]$)")
@@ -556,9 +578,10 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
 #'
 #' @return A 3D MCMC array of all contrasts
 #' @noRd
-make_all_contrasts <- function(d, trt_ref) {
+make_all_contrasts <- function(d, trt_ref, reverse_contrasts = FALSE) {
   if (!is.array(d) || length(dim(d)) != 3) abort("Not a 3D MCMC array [Iterations, Chains, Treatments]")
   if (!rlang::is_string(trt_ref)) abort("`trt_ref` must be a single string")
+  if (!rlang::is_bool(reverse_contrasts)) abort("`reverse_contrasts` should be TRUE or FALSE.")
 
   trts <- c(trt_ref, stringr::str_extract(dimnames(d)[[3]], "(?<=\\[)(.+)(?=\\]$)"))
   ntrt <- length(trts)
@@ -572,11 +595,22 @@ make_all_contrasts <- function(d, trt_ref) {
 
   contrs[ , , 1:(ntrt - 1)] <- d
   for (i in ntrt:ncol(d_ab)) {
-    contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]
+    if (!reverse_contrasts) {
+      contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]  # B vs A (default)
+    } else {
+      contrs[ , , i] <- d[ , , d_ab[1, i] - 1] - d[ , , d_ab[2, i] - 1]  # A vs B (reversed)
+    }
   }
 
   new_dimnames <- dimnames(d)
-  new_dimnames[[3]] <- paste0("d[", trts[d_ab[2, ]], " vs. ", trts[d_ab[1, ]], "]")
+  new_dimnames[[3]][1:(ntrt - 1)] <- dimnames(d)[[3]][1:(ntrt - 1)]
+  
+  if (!reverse_contrasts) {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[2, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[1, (ntrt):ncol(d_ab)]], "]")
+  } else {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[1, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[2, (ntrt):ncol(d_ab)]], "]")
+  }
+  
   dimnames(contrs) <- new_dimnames
 
   return(contrs)
