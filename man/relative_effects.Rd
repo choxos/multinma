@@ -12,6 +12,7 @@ relative_effects(
   trt_ref = NULL,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
   predictive_distribution = FALSE,
+  reverse_contrasts = FALSE,
   summary = TRUE
 )
 }
@@ -41,6 +42,11 @@ summary, default \code{c(0.025, 0.25, 0.5, 0.75, 0.975)}}
 \item{predictive_distribution}{Logical, when a random effects model has been
 fitted, should the predictive distribution for relative effects in a new
 study be returned? Default \code{FALSE}.}
+
+\item{reverse_contrasts}{Logical, should the direction of contrasts be reversed?
+If \code{FALSE} (default), contrasts are presented as "Treatment B vs. Treatment A".
+If \code{TRUE}, contrasts are presented as "Treatment A vs. Treatment B".
+Only used if \code{all_contrasts = TRUE}.}
 
 \item{summary}{Logical, calculate posterior summaries? Default \code{TRUE}.}
 }
