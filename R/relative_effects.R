@@ -23,11 +23,11 @@
 #' @param predictive_distribution Logical, when a random effects model has been
 #'   fitted, should the predictive distribution for relative effects in a new
 #'   study be returned? Default `FALSE`.
-#' @param summary Logical, calculate posterior summaries? Default `TRUE`.
 #' @param reverse_contrasts Logical, should the direction of contrasts be reversed? 
 #'   If `FALSE` (default), contrasts are presented as "Treatment B vs. Treatment A". 
 #'   If `TRUE`, contrasts are presented as "Treatment A vs. Treatment B". 
 #'   Only used if `all_contrasts = TRUE`.
+#' @param summary Logical, calculate posterior summaries? Default `TRUE`.
 #'
 #' @return A [nma_summary] object if `summary = TRUE`, otherwise a list
 #'   containing a 3D MCMC array of samples and (for regression models) a data
@@ -92,7 +92,7 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
                              summary = TRUE) {
   # Checks
   if (!inherits(x, "stan_nma")) abort("Expecting a `stan_nma` object, as returned by nma().")
-
+  
   if (!rlang::is_bool(reverse_contrasts))
     abort("`reverse_contrasts` should be TRUE or FALSE.")
 
