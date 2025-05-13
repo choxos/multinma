@@ -329,7 +329,7 @@ For more details on the plotting options see `?plot.nma_summary`.
 
 We can produce population-adjusted relative effects for each study population in the network using the `relative_effects()` function.
 ```{r pso_releff_FE}
-(pso_releff_FE <- relative_effects(pso_fit_FE))
+(pso_releff_FE <- relative_effects(pso_fit_FE, reverse_contrasts = T))
 plot(pso_releff_FE, ref_line = 0)
 ```
 

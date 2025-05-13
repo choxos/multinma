@@ -172,8 +172,8 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
       if (reverse_contrasts) {
         trtb <- contrs[1, ]
         trta <- contrs[2, ]
-      }
 
+      }
     } else if (!is.null(trt_ref) && trt_ref != nrt) {
       d_ref <- re_array[ , , paste0("d[", trt_ref, "]"), drop = FALSE]
       re_array <- sweep(re_array, 1:2, d_ref, FUN = "-")
@@ -477,8 +477,9 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
       
       # Swap trtb and trta if using reverse_contrasts
       if (reverse_contrasts) {
-        trtb <- contrs[1, ]
-        trta <- contrs[2, ]
+        temp <- trtb
+        trtb <- trta
+        trta <- temp
       }
     }
 
@@ -577,9 +578,10 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
 #'
 #' @return A 3D MCMC array of all contrasts
 #' @noRd
-make_all_contrasts <- function(d, trt_ref) {
+make_all_contrasts <- function(d, trt_ref, reverse_contrasts = FALSE) {
   if (!is.array(d) || length(dim(d)) != 3) abort("Not a 3D MCMC array [Iterations, Chains, Treatments]")
   if (!rlang::is_string(trt_ref)) abort("`trt_ref` must be a single string")
+  if (!rlang::is_bool(reverse_contrasts)) abort("`reverse_contrasts` should be TRUE or FALSE.")
 
   trts <- c(trt_ref, stringr::str_extract(dimnames(d)[[3]], "(?<=\\[)(.+)(?=\\]$)"))
   ntrt <- length(trts)
@@ -593,11 +595,22 @@ make_all_contrasts <- function(d, trt_ref) {
 
   contrs[ , , 1:(ntrt - 1)] <- d
   for (i in ntrt:ncol(d_ab)) {
-    contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]
+    if (!reverse_contrasts) {
+      contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]  # B vs A (default)
+    } else {
+      contrs[ , , i] <- d[ , , d_ab[1, i] - 1] - d[ , , d_ab[2, i] - 1]  # A vs B (reversed)
+    }
   }
 
   new_dimnames <- dimnames(d)
-  new_dimnames[[3]] <- paste0("d[", trts[d_ab[2, ]], " vs. ", trts[d_ab[1, ]], "]")
+  new_dimnames[[3]][1:(ntrt - 1)] <- dimnames(d)[[3]][1:(ntrt - 1)]
+  
+  if (!reverse_contrasts) {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[2, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[1, (ntrt):ncol(d_ab)]], "]")
+  } else {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[1, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[2, (ntrt):ncol(d_ab)]], "]")
+  }
+  
   dimnames(contrs) <- new_dimnames
 
   return(contrs)
