@@ -144,54 +144,67 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
     abort(glue::glue("Cannot produce relative effects under inconsistency '{x$consistency}' model."))
 
   # Get network reference treatment
-  nrt <- levels(x$network$treatments)[1]
+nrt <- levels(x$network$treatments)[1]
 
-  # Produce relative effects
-  if (is.null(x$regression) || is_only_offset(x$regression)) {
-    # If no regression model, relative effects are just the d's
+# Produce relative effects
+if (is.null(x$regression) || is_only_offset(x$regression)) {
+  # If no regression model, relative effects are just the d's
+  if (!predictive_distribution) {
+    re_array <- as.array(as.stanfit(x), pars = "d")
+  } else {
+    # For predictive distribution, use delta_new instead of d
+    re_array <- get_delta_new(x)
+  }
 
-    if (!predictive_distribution) {
-      re_array <- as.array(as.stanfit(x), pars = "d")
-    } else {
-      # For predictive distribution, use delta_new instead of d
-      re_array <- get_delta_new(x)
+  # Set treatments vector
+  trtb <- x$network$treatments[-1]
+  trta <- x$network$treatments[1]
+
+  if (all_contrasts) {
+    re_array <- make_all_contrasts(re_array, trt_ref = nrt, reverse_contrasts = reverse_contrasts)
+    contrs <- utils::combn(x$network$treatments, 2)
+    trtb <- contrs[2, ]
+    trta <- contrs[1, ]
+    
+    # Swap trtb and trta if using reverse_contrasts
+    if (reverse_contrasts) {
+      trtb <- contrs[1, ]
+      trta <- contrs[2, ]
     }
-
-    # Set treatments vector
-    trtb <- x$network$treatments[-1]
-    trta <- x$network$treatments[1]
-
-    if (all_contrasts) {
-      re_array <- make_all_contrasts(re_array, trt_ref = nrt, reverse_contrasts = reverse_contrasts)
-
-      contrs <- utils::combn(x$network$treatments, 2)
-      trtb <- contrs[2, ]
-      trta <- contrs[1, ]
-      
-      # Swap trtb and trta if using reverse_contrasts
-      if (reverse_contrasts) {
-        trtb <- contrs[1, ]
-        trta <- contrs[2, ]
-      }
-
-    } else if (!is.null(trt_ref) && trt_ref != nrt) {
-      d_ref <- re_array[ , , paste0("d[", trt_ref, "]"), drop = FALSE]
-      re_array <- sweep(re_array, 1:2, d_ref, FUN = "-")
-
-      # Add in parameter for network ref trt in place of trt_ref
-      re_array[ , , paste0("d[", trt_ref, "]")] <- -d_ref
-      d_names <- dimnames(re_array)[[3]]
-      d_names[d_names == paste0("d[", trt_ref, "]")] <- paste0("d[", nrt, "]")
-      dimnames(re_array)[[3]] <- d_names
-
-      # Reorder parameters
-      d_names <- c(paste0("d[", nrt, "]"), d_names[d_names != paste0("d[", nrt, "]")])
-      re_array <- re_array[ , , d_names, drop = FALSE]
-
-      trt_reorder <- sort(forcats::fct_relevel(x$network$treatments, trt_ref))
-      trtb <- trt_reorder[-1]
-      trta <- trt_reorder[1]
+  } else if (!is.null(trt_ref) && trt_ref != nrt) {
+    d_ref <- re_array[ , , paste0("d[", trt_ref, "]"), drop = FALSE]
+    re_array <- sweep(re_array, 1:2, d_ref, FUN = "-")
+    # Add in parameter for network ref trt in place of trt_ref
+    re_array[ , , paste0("d[", trt_ref, "]")] <- -d_ref
+    d_names <- dimnames(re_array)[[3]]
+    d_names[d_names == paste0("d[", trt_ref, "]")] <- paste0("d[", nrt, "]")
+    dimnames(re_array)[[3]] <- d_names
+    # Reorder parameters
+    d_names <- c(paste0("d[", nrt, "]"), d_names[d_names != paste0("d[", nrt, "]")])
+    re_array <- re_array[ , , d_names, drop = FALSE]
+    trt_reorder <- sort(forcats::fct_relevel(x$network$treatments, trt_ref))
+    trtb <- trt_reorder[-1]
+    trta <- trt_reorder[1]
+  } else if (reverse_contrasts) {
+    # NEW CODE: Reverse basic effects
+    # Negate the values
+    re_array <- -re_array
+    
+    # Change the parameter names to show reference vs. treatment
+    d_names <- dimnames(re_array)[[3]]
+    new_names <- gsub("^d\\[(.+)\\]$", paste0("d[", nrt, " vs. \\1]"), d_names)
+    dimnames(re_array)[[3]] <- new_names
+    
+    # Swap trta and trtb for plotting/output
+    temp <- trtb
+    trtb <- trta 
+    trta <- temp
+    
+    # Create multiple copies of trta to match trtb length
+    if (length(trta) == 1 && length(trtb) > 1) {
+      trta <- rep(trta, times = length(trtb))
     }
+  }
 
     # Fix up parameter names for predictive_distribution = TRUE
     if (predictive_distribution) {
@@ -577,9 +590,10 @@ relative_effects <- function(x, newdata = NULL, study = NULL,
 #'
 #' @return A 3D MCMC array of all contrasts
 #' @noRd
-make_all_contrasts <- function(d, trt_ref) {
+make_all_contrasts <- function(d, trt_ref, reverse_contrasts = FALSE) {
   if (!is.array(d) || length(dim(d)) != 3) abort("Not a 3D MCMC array [Iterations, Chains, Treatments]")
   if (!rlang::is_string(trt_ref)) abort("`trt_ref` must be a single string")
+  if (!rlang::is_bool(reverse_contrasts)) abort("`reverse_contrasts` should be TRUE or FALSE.")
 
   trts <- c(trt_ref, stringr::str_extract(dimnames(d)[[3]], "(?<=\\[)(.+)(?=\\]$)"))
   ntrt <- length(trts)
@@ -593,11 +607,22 @@ make_all_contrasts <- function(d, trt_ref) {
 
   contrs[ , , 1:(ntrt - 1)] <- d
   for (i in ntrt:ncol(d_ab)) {
-    contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]
+    if (!reverse_contrasts) {
+      contrs[ , , i] <- d[ , , d_ab[2, i] - 1] - d[ , , d_ab[1, i] - 1]  # B vs A (default)
+    } else {
+      contrs[ , , i] <- d[ , , d_ab[1, i] - 1] - d[ , , d_ab[2, i] - 1]  # A vs B (reversed)
+    }
   }
 
   new_dimnames <- dimnames(d)
-  new_dimnames[[3]] <- paste0("d[", trts[d_ab[2, ]], " vs. ", trts[d_ab[1, ]], "]")
+  new_dimnames[[3]][1:(ntrt - 1)] <- dimnames(d)[[3]][1:(ntrt - 1)]
+  
+  if (!reverse_contrasts) {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[2, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[1, (ntrt):ncol(d_ab)]], "]")
+  } else {
+    new_dimnames[[3]][(ntrt):ncol(d_ab)] <- paste0("d[", trts[d_ab[1, (ntrt):ncol(d_ab)]], " vs. ", trts[d_ab[2, (ntrt):ncol(d_ab)]], "]")
+  }
+  
   dimnames(contrs) <- new_dimnames
 
   return(contrs)
