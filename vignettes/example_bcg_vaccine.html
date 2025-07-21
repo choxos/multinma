@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Example: BCG vaccine for tuberculosis</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Example: BCG vaccine for tuberculosis</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(multinma)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code></pre></div>
+<p>This vignette describes the analysis of 13 trials investigating BCG
+vaccination vs. no vaccination for prevention of Tuberculosis (TB) <span class="citation">(<a href="#ref-TSD3">Dias et al. 2011</a>; <a href="#ref-Berkey1995">Berkey et al. 1995</a>)</span>. The data are
+available in this package as <code>bcg_vaccine</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(bcg_vaccine)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;   studyn trtn         trtc latitude  r   n</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; 1      1    1 Unvaccinated       44 11 139</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 2      1    2   Vaccinated       44  4 123</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 3      2    1 Unvaccinated       55 29 303</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 4      2    2   Vaccinated       55  6 306</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 5      3    1 Unvaccinated       42 11 220</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 6      3    2   Vaccinated       42  3 231</span></span></code></pre></div>
+<p><span class="citation">Dias et al. (<a href="#ref-TSD3">2011</a>)</span> used these data to demonstrate
+meta-regression models adjusting for the continuous covariate
+<code>latitude</code>, the absolute degrees latitude at which the study
+was conducted, which we recreate here.</p>
+<div id="setting-up-the-network" class="section level2">
+<h2>Setting up the network</h2>
+<p>We have data giving the number diagnosed with TB during trial
+follow-up (<code>r</code>) out of the total (<code>n</code>) in each
+arm, so we use the function <code>set_agd_arm()</code> to set up the
+network. We set “unvaccinated” as the network reference treatment.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>bcg_net <span class="ot">&lt;-</span> <span class="fu">set_agd_arm</span>(bcg_vaccine, </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                       <span class="at">study =</span> studyn,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                       <span class="at">trt =</span> trtc,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                       <span class="at">r =</span> r, </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                       <span class="at">n =</span> n,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                       <span class="at">trt_ref =</span> <span class="st">&quot;Unvaccinated&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>bcg_net</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; A network with 13 AgD studies (arm-based).</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; ------------------------------------------------------- AgD studies (arm-based) ---- </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;  Study Treatment arms              </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;  1     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;  2     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;  3     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;  4     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;  5     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;  6     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;  7     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;  8     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;  9     2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;  10    2: Unvaccinated | Vaccinated</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;  ... plus 3 more studies</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;  Outcome type: count</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; ------------------------------------------------------------------------------------</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; Total number of treatments: 2</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; Total number of studies: 13</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; Reference treatment is: Unvaccinated</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; Network is connected</span></span></code></pre></div>
+<p>The <code>latitude</code> variable in the <code>bcg_vaccine</code>
+data frame will automatically be available to use in a meta-regression
+model.</p>
+</div>
+<div id="meta-analysis-models" class="section level2">
+<h2>Meta-analysis models</h2>
+<p>We fit random effects (RE) models, firstly without any covariates,
+and then with a meta-regression on the continuous covariate
+<code>latitude</code>.</p>
+<div id="re-meta-analysis-no-covariate" class="section level3">
+<h3>RE meta-analysis (no covariate)</h3>
+<p>We start by fitting a standard RE model without any covariates. We
+use <span class="math inline">\(\mathrm{N}(0, 100^2)\)</span> prior
+distributions for the treatment effect <span class="math inline">\(d_\mathrm{Vaccine}\)</span> and study-specific
+intercepts <span class="math inline">\(\mu_j\)</span>, and a <span class="math inline">\(\textrm{half-N}(0, 5^2)\)</span> prior
+distribution for the heterogeneity standard deviation <span class="math inline">\(\tau\)</span>. We can examine the range of
+parameter values implied by these prior distributions with the
+<code>summary()</code> method:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; A Normal prior distribution: location = 0, scale = 100.</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 50% of the prior density lies between -67.45 and 67.45.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 95% of the prior density lies between -196 and 196.</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">half_normal</span>(<span class="at">scale =</span> <span class="dv">5</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; A half-Normal prior distribution: location = 0, scale = 5.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 50% of the prior density lies between 0 and 3.37.</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 95% of the prior density lies between 0 and 9.8.</span></span></code></pre></div>
+<p>The model is fitted with the <code>nma()</code> function, with a
+random effects model specified by
+<code>trt_effects = &quot;random&quot;</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>bcg_fit_unadj <span class="ot">&lt;-</span> <span class="fu">nma</span>(bcg_net, </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                     <span class="at">trt_effects =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                     <span class="at">prior_intercept =</span> <span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                     <span class="at">prior_trt =</span> <span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                     <span class="at">prior_het =</span> <span class="fu">half_normal</span>(<span class="at">scale =</span> <span class="dv">5</span>))</span></code></pre></div>
+<p>Basic parameter summaries are given by the <code>print()</code>
+method:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>bcg_fit_unadj</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; A random effects NMA with a binomial likelihood (logit link).</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; Inference for Stan model: binomial_1par.</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; 4 chains, each with iter=10000; warmup=5000; thin=1; </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; post-warmup draws per chain=5000, total post-warmup draws=20000.</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;                    mean se_mean   sd      2.5%       25%       50%       75%     97.5% n_eff Rhat</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; d[Vaccinated]     -0.77    0.00 0.22     -1.22     -0.90     -0.76     -0.62     -0.34  5466    1</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; lp__          -13453.95    0.06 4.51 -13463.63 -13456.79 -13453.63 -13450.77 -13446.04  5179    1</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; tau                0.68    0.00 0.20      0.39      0.54      0.65      0.78      1.17  6685    1</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Mon Apr 29 16:43:09 2024.</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; For each parameter, n_eff is a crude measure of effective sample size,</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; and Rhat is the potential scale reduction factor on split chains (at </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; convergence, Rhat=1).</span></span></code></pre></div>
+<p>By default, summaries of the study-specific intercepts <span class="math inline">\(\mu_j\)</span> and random effects <span class="math inline">\(\delta_j\)</span> are hidden, but could be
+examined by changing the <code>pars</code> argument:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Not run</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">print</span>(bcg_fit_unadj, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;d&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;delta&quot;</span>, <span class="st">&quot;tau&quot;</span>))</span></code></pre></div>
+<p>The prior and posterior distributions can be compared visually using
+the <code>plot_prior_posterior()</code> function:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">plot_prior_posterior</span>(bcg_fit_unadj, <span class="at">prior =</span> <span class="fu">c</span>(<span class="st">&quot;trt&quot;</span>, <span class="st">&quot;het&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="re-meta-regression-with-covariate-latitude" class="section level3">
+<h3>RE meta-regression with covariate <code>latitude</code></h3>
+<p>We now fit a RE meta-regression model, adjusting for
+<code>latitude</code>. We use <span class="math inline">\(\mathrm{N}(0,
+100^2)\)</span> prior distributions for the treatment effect <span class="math inline">\(d_\mathrm{Vaccine}\)</span>, study-specific
+intercepts <span class="math inline">\(\mu_j\)</span>, and regression
+coefficient <span class="math inline">\(\beta\)</span>. We use a <span class="math inline">\(\text{half-N}(0, 5^2)\)</span> prior distribution
+for the heterogeneity standard deviation <span class="math inline">\(\tau\)</span>. We can examine the range of
+parameter values implied by these prior distributions with the
+<code>summary()</code> method:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; A Normal prior distribution: location = 0, scale = 100.</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; 50% of the prior density lies between -67.45 and 67.45.</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; 95% of the prior density lies between -196 and 196.</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">half_normal</span>(<span class="at">scale =</span> <span class="dv">5</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; A half-Normal prior distribution: location = 0, scale = 5.</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 50% of the prior density lies between 0 and 3.37.</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 95% of the prior density lies between 0 and 9.8.</span></span></code></pre></div>
+<p>Again, the model is fitted with the <code>nma()</code> function. The
+<code>regression</code> formula <code>~ .trt:latitude</code> means that
+the interaction of latitude with treatment will be included; the
+<code>.trt</code> special variable indicates treatment, and
+<code>latitude</code> is in the original data set. We increase
+<code>adapt_delta</code> to 0.99 to remove a small number of divergent
+transition errors (the default for RE models is set to 0.95).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>bcg_fit_lat <span class="ot">&lt;-</span> <span class="fu">nma</span>(bcg_net, </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>                   <span class="at">trt_effects =</span> <span class="st">&quot;random&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                   <span class="at">regression =</span> <span class="sc">~</span>.trt<span class="sc">:</span>latitude,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>                   <span class="at">prior_intercept =</span> <span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                   <span class="at">prior_trt =</span> <span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>                   <span class="at">prior_reg =</span> <span class="fu">normal</span>(<span class="at">scale =</span> <span class="dv">100</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>                   <span class="at">prior_het =</span> <span class="fu">half_normal</span>(<span class="at">scale =</span> <span class="dv">5</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>                   <span class="at">adapt_delta =</span> <span class="fl">0.99</span>)</span></code></pre></div>
+<pre><code>#&gt; Note: No treatment classes specified in network, any interactions in `regression` formula will be separate (independent) for each treatment.
+#&gt; Use set_*() argument `trt_class` and nma() argument `class_interactions` to change this.</code></pre>
+<p>Basic parameter summaries are given by the <code>print()</code>
+method:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>bcg_fit_lat</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; A random effects NMA with a binomial likelihood (logit link).</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; Regression model: ~.trt:latitude.</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; Centred covariates at the following overall mean values:</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; latitude </span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 33.46154 </span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; Inference for Stan model: binomial_1par.</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 4 chains, each with iter=5000; warmup=2500; thin=1; </span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; post-warmup draws per chain=2500, total post-warmup draws=10000.</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;                                    mean se_mean   sd      2.5%       25%       50%       75%</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; beta[.trtVaccinated:latitude]     -0.03    0.00 0.01     -0.05     -0.04     -0.03     -0.03</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; d[Vaccinated]                     -0.76    0.00 0.12     -1.02     -0.83     -0.75     -0.69</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; lp__                          -13457.08    0.12 5.15 -13467.80 -13460.39 -13456.80 -13453.44</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; tau                                0.30    0.00 0.19      0.02      0.17      0.27      0.40</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt;                                   97.5% n_eff Rhat</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; beta[.trtVaccinated:latitude]     -0.01  4070    1</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt; d[Vaccinated]                     -0.52  4521    1</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt; lp__                          -13447.91  1949    1</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt; tau                                0.75  1889    1</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt; Samples were drawn using NUTS(diag_e) at Mon Apr 29 16:43:34 2024.</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co">#&gt; For each parameter, n_eff is a crude measure of effective sample size,</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt; and Rhat is the potential scale reduction factor on split chains (at </span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt; convergence, Rhat=1).</span></span></code></pre></div>
+<p>Note that <code>latitude</code> has automatically been centered at
+33.46, the mean value for the studies in the network.</p>
+<p>By default, summaries of the study-specific intercepts <span class="math inline">\(\mu_j\)</span> and study-specific relative effects
+<span class="math inline">\(\delta_{jk}\)</span> are hidden, but could
+be examined by changing the <code>pars</code> argument:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Not run</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">print</span>(bcg_fit_lat, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&quot;d&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;delta&quot;</span>, <span class="st">&quot;tau&quot;</span>))</span></code></pre></div>
+<p>The prior and posterior distributions can be compared visually using
+the <code>plot_prior_posterior()</code> function:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot_prior_posterior</span>(bcg_fit_lat, <span class="at">prior =</span> <span class="fu">c</span>(<span class="st">&quot;trt&quot;</span>, <span class="st">&quot;reg&quot;</span>, <span class="st">&quot;het&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="model-fit-and-comparison" class="section level2">
+<h2>Model fit and comparison</h2>
+<p>Model fit can be checked using the <code>dic()</code> function:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>(bcg_dic_unadj <span class="ot">&lt;-</span> <span class="fu">dic</span>(bcg_fit_unadj))</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 26.1 (on 26 data points)</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt;                pD: 23.6</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt;               DIC: 49.7</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>(bcg_dic_lat <span class="ot">&lt;-</span> <span class="fu">dic</span>(bcg_fit_lat))</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; Residual deviance: 30.4 (on 26 data points)</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt;                pD: 21.5</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt;               DIC: 51.9</span></span></code></pre></div>
+<p>The DIC is very similar between the two models, so we might at first
+choose the unadjusted model. The posterior mean residual deviance is
+larger for the model with the covariate, but this model also has a lower
+effective number of parameters <span class="math inline">\(p_D\)</span>
+so is allowing for more shrinkage of the random treatment effects.
+Moreover, the model with the covariate has a much lower estimated
+heterogeneity standard deviation:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">summary</span>(bcg_fit_unadj, <span class="at">pars =</span> <span class="st">&quot;tau&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt;     mean  sd 2.5%  25%  50%  75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&gt; tau 0.68 0.2 0.39 0.54 0.65 0.78  1.17     6408    10914    1</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">summary</span>(bcg_fit_lat, <span class="at">pars =</span> <span class="st">&quot;tau&quot;</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt;     mean   sd 2.5%  25%  50% 75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; tau  0.3 0.19 0.02 0.17 0.27 0.4  0.75     1696     2220    1</span></span></code></pre></div>
+<p>Adjusting for latitude is explaining a substantial amount of
+heterogeneity in the data. The 95% Credible Interval for the regression
+coefficient also excludes zero:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">summary</span>(bcg_fit_lat, <span class="at">pars =</span> <span class="st">&quot;beta&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt;                                mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co">#&gt; beta[.trtVaccinated:latitude] -0.03 0.01 -0.05 -0.04 -0.03 -0.03 -0.01     4279     4859    1</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">plot</span>(bcg_fit_lat, </span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>     <span class="at">pars =</span> <span class="st">&quot;beta&quot;</span>, </span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>     <span class="at">ref_line =</span> <span class="dv">0</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>     <span class="at">stat =</span> <span class="st">&quot;halfeye&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>Altogether, we might prefer the model with the adjustment for
+latitude. When considering covariates in random effects models it is
+important not to just look at the DIC <span class="citation">(<a href="#ref-TSD3">Dias et al. 2011</a>)</span>. We should also consider
+any reductions in heterogeneity, and the estimated regression
+coefficients and their standard error. The DIC is not sensitive to
+changes in the heterogeneity, as RE models are very flexible and can fit
+the data well whatever the level of heterogeneity.</p>
+</div>
+<div id="further-results" class="section level2">
+<h2>Further results</h2>
+<p>We can produce estimates of the relative effect of vaccination at any
+latitude using the <code>relative_effects()</code> function. The
+<code>newdata</code> argument specifies a data frame containing the
+values of the covariate <code>latitude</code> that we are interested in,
+and the <code>study</code> argument is used to specify a column of
+<code>newdata</code> for an informative label.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>bcg_releff_lat <span class="ot">&lt;-</span> <span class="fu">relative_effects</span>(bcg_fit_lat,</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>                                   <span class="at">newdata =</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">latitude =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>                                                            <span class="at">label =</span> <span class="fu">paste0</span>(latitude, <span class="st">&quot;\u00B0 latitude&quot;</span>)),</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>                                   <span class="at">study =</span> label)</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>bcg_releff_lat</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 10° latitude ---- </span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt;        10</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt;                              mean   sd  2.5%   25% 50%  75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; d[10° latitude: Vaccinated] -0.02 0.23 -0.51 -0.13   0 0.11  0.42     4173     4678    1</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 20° latitude ---- </span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt;        20</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co">#&gt;                              mean   sd 2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="co">#&gt; d[20° latitude: Vaccinated] -0.33 0.16 -0.7 -0.42 -0.32 -0.24 -0.02     4236     4598    1</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 30° latitude ---- </span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="co">#&gt;        30</span></span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="co">#&gt;                              mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a><span class="co">#&gt; d[30° latitude: Vaccinated] -0.65 0.13 -0.92 -0.72 -0.64 -0.58 -0.42     4485     4757    1</span></span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 40° latitude ---- </span></span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a><span class="co">#&gt;        40</span></span>
+<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a><span class="co">#&gt;                              mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a><span class="co">#&gt; d[40° latitude: Vaccinated] -0.97 0.14 -1.26 -1.05 -0.96 -0.89 -0.69     4650     5127    1</span></span>
+<span id="cb19-42"><a href="#cb19-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-43"><a href="#cb19-43" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 50° latitude ---- </span></span>
+<span id="cb19-44"><a href="#cb19-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-45"><a href="#cb19-45" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb19-46"><a href="#cb19-46" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb19-47"><a href="#cb19-47" tabindex="-1"></a><span class="co">#&gt;        50</span></span>
+<span id="cb19-48"><a href="#cb19-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-49"><a href="#cb19-49" tabindex="-1"></a><span class="co">#&gt;                              mean  sd  2.5%  25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb19-50"><a href="#cb19-50" tabindex="-1"></a><span class="co">#&gt; d[50° latitude: Vaccinated] -1.29 0.2 -1.69 -1.4 -1.28 -1.17 -0.88     4558     4773    1</span></span></code></pre></div>
+<p>The <code>plot()</code> method may be used to visually compare these
+estimates:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">plot</span>(bcg_releff_lat, </span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>     <span class="at">ref_line =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>A more sophisticated plot shows the regression line and confidence
+band for the effect of latitude, overlaid on the observed log odds
+ratios in each study:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co"># Get data for regression line</span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>lat_range <span class="ot">&lt;-</span> <span class="fu">range</span>(bcg_vaccine<span class="sc">$</span>latitude)</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>lat_dat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">latitude =</span> <span class="fu">seq</span>(lat_range[<span class="dv">1</span>], lat_range[<span class="dv">2</span>], <span class="at">by =</span> <span class="dv">1</span>))</span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>bcg_lat_reg <span class="ot">&lt;-</span> <span class="fu">relative_effects</span>(bcg_fit_lat, </span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>                                <span class="at">newdata =</span> lat_dat) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>  <span class="fu">bind_cols</span>(lat_dat)</span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="co"># Get study log odds ratios</span></span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a>bcg_lor <span class="ot">&lt;-</span> bcg_vaccine <span class="sc">%&gt;%</span> </span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a>  <span class="fu">group_by</span>(studyn) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lor =</span> <span class="fu">log</span>(r <span class="sc">/</span> (n <span class="sc">-</span> r)) <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">first</span>(r) <span class="sc">/</span> (<span class="fu">first</span>(n) <span class="sc">-</span> <span class="fu">first</span>(r))),</span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a>         <span class="at">sample_size =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a></span>
+<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> latitude), <span class="at">data =</span> bcg_lor) <span class="sc">+</span></span>
+<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">2.5%</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">97.5%</span><span class="st">`</span>), <span class="at">data =</span> bcg_lat_reg,</span>
+<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">data =</span> bcg_lat_reg,</span>
+<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a>            <span class="at">colour =</span> <span class="st">&quot;darkred&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> lor, <span class="at">size =</span> sample_size), <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">60</span>)) <span class="sc">+</span></span>
+<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Degrees Latitude&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;log Odds Ratio&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="st">&quot;Sample Size&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a>  <span class="fu">theme_multinma</span>()</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGwCAMAAAB2PiqAAAAACXBIWXMAAA7DAAAOwwHHb6hkAAADAFBMVEX////d3d39/f1mZmb+/v78/Pz5+fncs7P6+vr29vbWra3y8vL4+PjKysrr6+v39/fW1tbq6uqbm5vQ0ND7+/vYr6/bsrJYSEjfurr19fXZsLAAAADlx8fbsbGLAAAEBATS0tJMTExKSkq/v7+0tLRYWFj8+fnx8fHJycnV1dVOTk6zs7NQUFBcXFwkJCTv7+8rKyvw8PD09PTcsrLq0tKMAgLdtrYwMDBlZWUPDw/u2dnx4eG3t7djY2PZ2dkKCgrb29v+/PzLy8vCwsK7kpKWbW1TU1NANDSNjY1eXl5CNjb79vbet7fOzs4eHR26urqjo6OOBQU7OzuPCAjw39/FxcU/Pz/hvr7s1tbm5uZsbGxQQkLbr6/37e2rq6uRCwuXGhoZGRlISEjv3d1SUlJVRUWTEhLp6ent7e3gvLz+/f2UlJRWVlacJSWaICDc3Nyvr6/BwcHfubnjwcGHh4chISFcUFCeKipgYGDkxcXpzs69vb0GBgauTU3Ki4vWpqbSnJwfHx+Xl5fo6Oj16Oj05eVnZ2dFODjQmZm4YmKVFhbIyMiSDw/OlJQRERHPz8/26uroy8v68/P//v6ysrJvb2+BgYFIOzu7aWnUoaFoaGimpqaLi4v48PDdtLTBdnZMPT2jNDTJiIjZrKyTk5OnPT1ra2t3d3fg4OATEhJGRkbMj4+gLy/i4uKpqalRUVFaWlrmycnVrKw+MjLarq7XqamlODh7e3upQ0OyVVWYmJgUFBTy4+Oenp4XFxdwcHDk5OTVpKSampq+vr79+/u+cXHTn5+0WlqEhITiwMDjw8M5OTkzMzOrR0fDe3vbsLDHhIS8bm6RdXVDQ0OQkJC2Xl5+fn4nJye+m5umiIiwUVHEfn6goKBzc3NXR0c7LCyujo6KiorFoKDXr6+afn5LOjqfgIDYqqqJb2/PqKjSqqpuWlpaSUnFgIDLpaW5lpZeTEyzkZFjUVE2NjbZtLRzXV15YmIvJSXIr69nVFSAaGiCamqslZXEgIB+Zmbd/WYcluEyAAAgAElEQVR42uzde1BU1wEG8Av7OAusWSK4uEEXdhURAsFBrKgsPtKww2KS+krU9TUkKFGTOm19pRqTxnFjjFifGEBCfBKjSEJitK2tzmiN5qFSx2p0iHGsGrWmZsY2nXY6vXt3wb13X/fuWSJ79/v+wLN3OZwr/jzn3rNnzzIMgiAIgiAIgiAIgiDyTWY3r6zqRpH+NJUjtmm6tn00HRcxgB7+uVIQlU5JETVNZaWBpnKy6oE1HauhajpWeCQrIXIAxQiPxGppfp6G6myo/uOpYh9Y08pkqqaVwiOJAARAAARAAARAABS+JK6wpLtK3XNycg4DEABJik6Rb9hp4Io1GvRAACQ16dMYpmgU95u2YAgDIMnp059hkoqcpUk155rnOU86ZsSIxGK1IFqDmiJxNJXV+TSVddoH1rRWR9W014mnZ3ZRQOl92zuKs86+qLKysnGEShCNTkURLU1llYGmskbzwJpOVlM1nSw8ktUVAWXNY4ew/u2PimsxhGEIk3YRvSJON5k7scTtquS6RAACIIldUGEpO27lJDPKebmlT+MiGoAwkRgY0KxD52oTAAiAQgQU87xprrn5IQACoNAAbZyrUCiy6wAIgEICpDazfhSLmgEIgEICpNxnYQE17wQgAAptCDtUblFYdv8agAAoNEDqs+ZsU60SgAAoxNt4Jm9E/o/TNADJE9CP1jQAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAARAAyRjQ0NkABEAUgHq9rAQgAKIARCYCEADRACLjAUiugGYVawRRx2koovM+dLJHjx7DxNU20DStVdPUpmparaOpne914l1yj8QH2QOR+qnogTCEUQAio9cBEABRACIvlAEQAFEAIieOAhAAUQAivWYDEABRACLBJxQBCIACACIFAARANIDIcwAEQDSAyB8ACIBoANUvByAAogAUZEoagAAoCCAyegsAARAFIPKLdQAEQBSAAr2oAUAAFBwQebYfAAEQBSDyy6MABEAUgMjiowAEQBSASC8VAAEQBSA/L80DEACJBETWrgcgAKIA5HNxBwABkGhApEAJQABEAciHIAACIAmAvAUBEABJAeQlCIAASPA4YVTRhQvn9SIFARAA8R41njOZzA6rreFqvD9BAARA/gApm8z7ChWKBSkpdmvFFTGCAAiAPH6r28stCgUHKCWluvq8CEEABED3i33LCxUdgFIa7DeDCwIgAOoo5eUsUngASrHeIEEF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" style="display: block; margin: auto;" /></p>
+<p>In the presence of heterogeneity, it has been argued that decision
+makers should consider the predictive distribution of relative effects
+in a new study, instead of the posterior distribution of the mean
+treatment effects, as this reflects uncertainty due to heterogeneity and
+may better represent uncertainty about a future roll-out of a treatment
+<span class="citation">(see <a href="#ref-TSD3">Dias et al.
+2011</a>)</span>. We can produce predictive distributions using the
+<code>predictive_distribution = TRUE</code> argument to
+<code>relative_effects()</code>. Dias et al. <span class="citation">(<a href="#ref-Dias2018">2018, sec. 8.3.2</a>)</span> consider the
+predictive distributions for this BCG vaccine analysis.</p>
+<p>In the unadjusted analysis, whilst there is substantial evidence that
+vaccination is effective on average and essentially zero probability of
+harm based on the mean effect, the predictive distribution for
+effectiveness in a new study is wide and covers a range of harmful
+effects:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>(bcg_predeff_unadj <span class="ot">&lt;-</span> <span class="fu">relative_effects</span>(bcg_fit_unadj, <span class="at">predictive_distribution =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt;                        mean   sd 2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&gt; delta_new[Vaccinated] -0.77 0.75 -2.3 -1.23 -0.77 -0.32  0.69    15993    17348    1</span></span></code></pre></div>
+<p>The predictive probability of a new trial showing a harmful effect
+is:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">as.matrix</span>(bcg_predeff_unadj) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.1329</span></span></code></pre></div>
+<p>For the analysis adjusting for latitude, the predictive distribution
+of relative effects now depends on latitude; here we calculate these in
+increments of 10 degrees from the equator:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>bcg_predeff_lat <span class="ot">&lt;-</span> <span class="fu">relative_effects</span>(bcg_fit_lat,</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                                   <span class="at">newdata =</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">latitude =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>                                                            <span class="at">label =</span> <span class="fu">paste0</span>(latitude, <span class="st">&quot;\u00B0 latitude&quot;</span>)),</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>                                   <span class="at">study =</span> label,</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>                                   <span class="at">predictive_distribution =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>bcg_predeff_lat</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="co">#&gt; ------------------------------------------------------------ Study: 0° latitude ---- </span></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="co">#&gt;         0</span></span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a><span class="co">#&gt;                                    mean   sd  2.5%  25%  50%  75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="co">#&gt; delta_new[0° latitude: Vaccinated]  0.3 0.47 -0.75 0.07 0.33 0.53  1.23     6127     5817    1</span></span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 10° latitude ---- </span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a><span class="co">#&gt;        10</span></span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a><span class="co">#&gt;                                      mean   sd  2.5%   25%  50%  75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a><span class="co">#&gt; delta_new[10° latitude: Vaccinated] -0.02 0.43 -0.95 -0.22 0.01 0.19  0.83     6908     6187    1</span></span>
+<span id="cb24-25"><a href="#cb24-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-26"><a href="#cb24-26" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 20° latitude ---- </span></span>
+<span id="cb24-27"><a href="#cb24-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-28"><a href="#cb24-28" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-29"><a href="#cb24-29" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-30"><a href="#cb24-30" tabindex="-1"></a><span class="co">#&gt;        20</span></span>
+<span id="cb24-31"><a href="#cb24-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-32"><a href="#cb24-32" tabindex="-1"></a><span class="co">#&gt;                                      mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-33"><a href="#cb24-33" tabindex="-1"></a><span class="co">#&gt; delta_new[20° latitude: Vaccinated] -0.34 0.39 -1.19 -0.52 -0.31 -0.15  0.46     7937     6513    1</span></span>
+<span id="cb24-34"><a href="#cb24-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-35"><a href="#cb24-35" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 30° latitude ---- </span></span>
+<span id="cb24-36"><a href="#cb24-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-37"><a href="#cb24-37" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-38"><a href="#cb24-38" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-39"><a href="#cb24-39" tabindex="-1"></a><span class="co">#&gt;        30</span></span>
+<span id="cb24-40"><a href="#cb24-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-41"><a href="#cb24-41" tabindex="-1"></a><span class="co">#&gt;                                      mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-42"><a href="#cb24-42" tabindex="-1"></a><span class="co">#&gt; delta_new[30° latitude: Vaccinated] -0.65 0.38 -1.48 -0.83 -0.64 -0.48  0.14     8903     6626    1</span></span>
+<span id="cb24-43"><a href="#cb24-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-44"><a href="#cb24-44" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 40° latitude ---- </span></span>
+<span id="cb24-45"><a href="#cb24-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-46"><a href="#cb24-46" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-47"><a href="#cb24-47" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-48"><a href="#cb24-48" tabindex="-1"></a><span class="co">#&gt;        40</span></span>
+<span id="cb24-49"><a href="#cb24-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-50"><a href="#cb24-50" tabindex="-1"></a><span class="co">#&gt;                                      mean   sd  2.5%   25%   50%   75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-51"><a href="#cb24-51" tabindex="-1"></a><span class="co">#&gt; delta_new[40° latitude: Vaccinated] -0.97 0.38 -1.79 -1.15 -0.96 -0.79 -0.16     8971     7004    1</span></span>
+<span id="cb24-52"><a href="#cb24-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-53"><a href="#cb24-53" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------------------------- Study: 50° latitude ---- </span></span>
+<span id="cb24-54"><a href="#cb24-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-55"><a href="#cb24-55" tabindex="-1"></a><span class="co">#&gt; Covariate values:</span></span>
+<span id="cb24-56"><a href="#cb24-56" tabindex="-1"></a><span class="co">#&gt;  latitude</span></span>
+<span id="cb24-57"><a href="#cb24-57" tabindex="-1"></a><span class="co">#&gt;        50</span></span>
+<span id="cb24-58"><a href="#cb24-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb24-59"><a href="#cb24-59" tabindex="-1"></a><span class="co">#&gt;                                      mean   sd  2.5%   25%   50%  75% 97.5% Bulk_ESS Tail_ESS Rhat</span></span>
+<span id="cb24-60"><a href="#cb24-60" tabindex="-1"></a><span class="co">#&gt; delta_new[50° latitude: Vaccinated] -1.29 0.41 -2.14 -1.49 -1.29 -1.1 -0.43     8231     7258    1</span></span></code></pre></div>
+<p>The predictive probabilities of a new trial carried out at a given
+latitude showing a harmful effect can be calculated as:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">colMeans</span>(<span class="fu">as.matrix</span>(bcg_predeff_lat) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#&gt;  delta_new[0° latitude: Vaccinated] delta_new[10° latitude: Vaccinated] </span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&gt;                              0.7977                              0.5109 </span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; delta_new[20° latitude: Vaccinated] delta_new[30° latitude: Vaccinated] </span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&gt;                              0.1349                              0.0416 </span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&gt; delta_new[40° latitude: Vaccinated] delta_new[50° latitude: Vaccinated] </span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&gt;                              0.0141                              0.0062</span></span></code></pre></div>
+<p>So the predictive probability that a new trial carried out at the
+equator shows a harmful effect is around 80%, whereas at 50 degrees
+latitude the predictive probability is only 0.7%.</p>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Berkey1995" class="csl-entry">
+Berkey, C. S., D. C. Hoaglin, F. Mosteller, and G. A. Colditz. 1995.
+<span>“A Random-Effects Regression Model for Meta-Analysis.”</span>
+<em>Statistics in Medicine</em> 14 (4): 395–411. <a href="https://doi.org/10.1002/sim.4780140406">https://doi.org/10.1002/sim.4780140406</a>.
+</div>
+<div id="ref-Dias2018" class="csl-entry">
+Dias, S., A. E. Ades, N. J. Welton, J. P. Jansen, and A. J. Sutton.
+2018. <em>Network Meta-Analysis for Decision Making</em>. Statistics in
+Practice. John Wiley <span>&amp;</span> Sons, Ltd.
+</div>
+<div id="ref-TSD3" class="csl-entry">
+Dias, S., A. J. Sutton, N. J. Welton, and A. E. Ades. 2011.
+<span>“<span>NICE DSU Technical Support Document</span> 3:
+Heterogeneity: Subgroups, Meta-Regression, Bias and
+Bias-Adjustment.”</span> <span>National Institute for Health and Care
+Excellence</span>. <a href="https://www.sheffield.ac.uk/nice-dsu">https://www.sheffield.ac.uk/nice-dsu</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

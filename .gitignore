@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+src/*.o
+src/*.cc
+src/*.cpp
+src/*.hpp
+src/*.h
+src/multinma.so
+src/multinma.dll
+src/init.o
+vignettes/*.R
+!vignettes/*.Rmd
+vignettes/*_files
+inst/*.bib.*
+inst/doc
+docs
