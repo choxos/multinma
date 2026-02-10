@@ -198,7 +198,10 @@ test_that("Plaque psoriasis", {
   )
 
 
-  class_pal <- c("#D95F02", "#7570B3", "#E7298A", "#E6AB02")
+  class_pal <- c(`IL-12/23 blocker` = "#D95F02",
+                 `IL-17 blocker` = "#7570B3",
+                 `Placebo` = "#E7298A",
+                 `TNFa blocker` = "#E6AB02")
 
 
   expect_doppelganger("Plaque psoriasis network",
@@ -284,13 +287,13 @@ test_that("Transfusion", {
 
 test_that("NDMM", {
 
-  ndmm_ipd$trtclass <- case_match(ndmm_ipd$trtf,
-                                  "Pbo" ~ "Placebo",
-                                  c("Len", "Thal") ~ "Active")
+  ndmm_ipd$trtclass <- forcats::fct_collapse(ndmm_ipd$trtf,
+                                             Placebo = "Pbo",
+                                             Active = c("Len", "Thal"))
 
-  ndmm_agd$trtclass <- case_match(ndmm_agd$trtf,
-                                  "Pbo" ~ "Placebo",
-                                  c("Len", "Thal") ~ "Active")
+  ndmm_agd$trtclass <- forcats::fct_collapse(ndmm_agd$trtf,
+                                             Placebo = "Pbo",
+                                             Active = c("Len", "Thal"))
 
   ndmm_net <- combine_network(
     set_ipd(ndmm_ipd,
