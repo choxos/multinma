@@ -1,22 +1,21 @@
-.Rproj.user
-.Rhistory
-.RData
-src/*.o
-src/*.cc
-src/*.cpp
-src/*.hpp
-src/*.h
-src/multinma.so
-src/multinma.dll
-src/init.o
-vignettes/*.R
-!vignettes/*.Rmd
-vignettes/*_files
-inst/*.bib.*
-inst/doc
-docs
-!multinma.jl/docs/
-multinma.jl/docs/build/
-multinma.jl/docs/Manifest.toml
-multinma.jl/Manifest.toml
-multinma.jl/.DS_Store
+# Julia
+Manifest.toml
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/deps.jl
+deps/build.log
+
+# Documentation build output
+docs/build/
+docs/site/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

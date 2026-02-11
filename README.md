@@ -1,131 +1,208 @@
+# multinma.jl
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://choxos.github.io/multinma/)
+[![Julia](https://img.shields.io/badge/Julia-1.10%2B-blue.svg)](https://julialang.org)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-# multinma: Network Meta-Analysis of individual and aggregate data in Stan <img src='man/figures/logo.svg' style="float:right" height="139" />
+**Bayesian Network Meta-Analysis (NMA) and Multilevel Network Meta-Regression (ML-NMR) in Julia.**
 
-<!-- badges: start -->
+multinma.jl is a Julia port of the [multinma](https://dmphillippo.github.io/multinma/) R package, providing a complete framework for synthesising evidence from multiple studies comparing multiple treatments. It supports individual patient data (IPD), aggregate data (AgD), or mixtures of both, using Bayesian hierarchical models fitted via Stan.
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/multinma)](https://CRAN.R-project.org/package=multinma)
-[![R-universe](https://dmphillippo.r-universe.dev/badges/multinma)](https://dmphillippo.r-universe.dev)
-[![R-CMD-check](https://github.com/dmphillippo/multinma/workflows/R-CMD-check/badge.svg)](https://github.com/dmphillippo/multinma/actions)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3904454.svg)](https://doi.org/10.5281/zenodo.3904454)
-<!-- badges: end -->
+## Features
 
-The `multinma` package implements network meta-analysis, network
-meta-regression, and multilevel network meta-regression models which
-combine evidence from a network of studies and treatments using either
-aggregate data or individual patient data from each study (Phillippo et
-al. 2020; Phillippo 2019). Models are estimated in a Bayesian framework
-using Stan (Carpenter et al. 2017).
+- **Network meta-analysis** with fixed or random treatment effects
+- **Consistency and inconsistency models** (UME, node-splitting)
+- **Multiple likelihoods**: Binomial, Normal, Poisson, Ordered Multinomial, Survival
+- **Multiple link functions**: logit, probit, cloglog, log, identity
+- **Contrast-based and arm-based data** (or both combined)
+- **ML-NMR**: Combine IPD and AgD with population adjustment via numerical integration
+- **Survival analysis**: Parametric distributions (Weibull, Gompertz, log-normal, etc.) and flexible M-spline hazards
+- **Post-processing**: Relative effects, absolute predictions, posterior ranks, SUCRA, DIC
+- **Visualization**: Network plots, forest plots, rank probability heatmaps (via Makie.jl)
+- **10 prior distributions** with sensible defaults
+- **9 bundled datasets** from published NMA studies
 
 ## Installation
 
-You can install the released version of `multinma` from
-[CRAN](https://CRAN.R-project.org/package=multinma) with:
-
-``` r
-install.packages("multinma")
+```julia
+using Pkg
+Pkg.add(url="https://github.com/choxos/multinma")
 ```
 
-The development version can be installed from
-[R-universe](https://dmphillippo.r-universe.dev) with:
+Or in the Pkg REPL (press `]`):
 
-``` r
-install.packages("multinma", repos = c("https://dmphillippo.r-universe.dev", getOption("repos")))
+```
+add https://github.com/choxos/multinma
 ```
 
-or from source on [GitHub](https://github.com/dmphillippo/multinma)
-with:
+## Quick Start
 
-``` r
-# install.packages("devtools")
-devtools::install_github("dmphillippo/multinma")
+### Smoking Cessation NMA (Hasselblad 1998)
+
+```julia
+using multinma
+
+# Load the bundled smoking cessation dataset
+smoking = load_dataset("smoking")
+
+# Set up the network with arm-based aggregate data
+smk_net = set_agd_arm(smoking;
+    study = :studyn,
+    trt = :trtc,
+    r = :r,
+    n = :n,
+    trt_ref = "No intervention")
+
+# Check network structure
+is_network_connected(smk_net)  # true
+length(levels(smk_net.treatments))  # 4 treatments
+length(levels(smk_net.studies))     # 24 studies
+
+# Configure the NMA model (random effects)
+smk_fit = nma(smk_net;
+    trt_effects = :random,
+    prior_intercept = normal(scale=100.0),
+    prior_trt = normal(scale=100.0),
+    prior_het = half_normal(scale=5.0))
+
+# Auto-detected: binomial likelihood with logit link
+smk_fit.likelihood  # "binomial_1par"
+smk_fit.link        # "logit"
 ```
 
-Installing from source requires that the `rstan` package is installed
-and configured. See the installation guide
-[here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
+### Contrast-Based Data (Parkinson's Disease)
 
-## Getting started
+```julia
+parkinsons = load_dataset("parkinsons")
 
-A good place to start is with the package vignettes which walk through
-example analyses, see `vignette("vignette_overview")` for an overview.
-The series of NICE Technical Support Documents on evidence synthesis
-gives a detailed introduction to network meta-analysis:
+# Arm-based setup
+arm_net = set_agd_arm(parkinsons;
+    study = :studyn, trt = :trtn,
+    y = :y, se = :se, sample_size = :n,
+    trt_ref = "4")
 
-> Dias, S. et al. (2011). “NICE DSU Technical Support Documents 1-7:
-> Evidence Synthesis for Decision Making.” *National Institute for
-> Health and Care Excellence.* Available from
-> <https://www.sheffield.ac.uk/nice-dsu/tsds>.
+# Contrast-based setup
+contr_net = set_agd_contrast(parkinsons;
+    study = :studyn, trt = :trtn,
+    y = :diff, se = :se_diff,
+    sample_size = :n, trt_ref = "4")
 
-Multilevel network meta-regression is set out in the following methods
-papers:
+# Both give the same network: 5 treatments, 7 studies
+```
 
-> Phillippo, D. M. et al. (2020). “Multilevel Network Meta-Regression
-> for population-adjusted treatment comparisons.” *Journal of the Royal
-> Statistical Society: Series A (Statistics in Society)*,
-> 183(3):1189-1210. doi:
-> [10.1111/rssa.12579](https://doi.org/10.1111/rssa.12579).
+### Network Visualization
 
-> Phillippo, D. M. et al. (2024). “Multilevel network meta-regression
-> for general likelihoods: synthesis of individual and aggregate data
-> with applications to survival analysis”.
-> *arXiv*:[2401.12640](https://arxiv.org/abs/2401.12640).
+```julia
+using CairoMakie
 
-## Citing multinma
+smk_net = set_agd_arm(smoking;
+    study = :studyn, trt = :trtc, r = :r, n = :n,
+    trt_ref = "No intervention")
 
-The `multinma` package can be cited as follows:
+plot_data = plot_network(smk_net)
+# Returns (graph, labels, edge_weights) for use with GraphMakie
+```
 
-> Phillippo, D. M. (2025). *multinma: Bayesian Network Meta-Analysis of
-> Individual and Aggregate Data*. R package version 0.8.1.9000, doi:
-> [10.5281/zenodo.3904454](https://doi.org/10.5281/zenodo.3904454).
+## Available Datasets
 
-When fitting ML-NMR models, please cite the methods paper:
+| Dataset | Studies | Treatments | Outcome | Source |
+|---------|---------|------------|---------|-------|
+| `smoking` | 24 | 4 | Binary | Hasselblad 1998 |
+| `blocker` | 22 | 2 | Binary | Carlin 1992 |
+| `thrombolytics` | 50 | 9 | Binary | Boland 2003 |
+| `parkinsons` | 7 | 5 | Continuous | TSD 2 |
+| `diabetes` | 22 | 6 | Binary | Elliott 2007 |
+| `statins` | 19 | 5+ | Binary | - |
+| `transfusion` | 6 | 2+ | Binary | - |
+| `dietary_fat` | 10 | 2+ | Binary | - |
+| `atrial_fibrillation` | 26 | 4+ | Mixed | - |
 
-> Phillippo, D. M. et al. (2020). “Multilevel Network Meta-Regression
-> for population-adjusted treatment comparisons.” *Journal of the Royal
-> Statistical Society: Series A (Statistics in Society)*,
-> 183(3):1189-1210. doi:
-> [10.1111/rssa.12579](https://doi.org/10.1111/rssa.12579).
+```julia
+available_datasets()  # List all datasets
+smoking = load_dataset("smoking")
+```
 
-For ML-NMR models with time-to-event outcomes, please cite:
+## Prior Distributions
 
-> Phillippo, D. M. et al. (2024). “Multilevel network meta-regression
-> for general likelihoods: synthesis of individual and aggregate data
-> with applications to survival analysis”.
-> *arXiv*:[2401.12640](https://arxiv.org/abs/2401.12640).
+```julia
+normal(scale=100.0)           # Normal(0, 100)
+half_normal(scale=5.0)        # Half-Normal(5)
+cauchy(scale=2.5)             # Cauchy(0, 2.5)
+half_cauchy(scale=2.5)        # Half-Cauchy(2.5)
+student_t(df=3.0, scale=2.5)  # Student-t(3, 0, 2.5)
+half_student_t(df=3.0)        # Half-Student-t(3)
+log_normal(scale=1.0)         # Log-Normal(0, 1)
+exponential_prior(scale=1.0)  # Exponential(1)
+flat()                        # Flat (improper)
+```
+
+## Survival Distributions
+
+Seven parametric survival distributions with density, survival, hazard, cumulative hazard, and quantile functions:
+
+```julia
+ExponentialSurv(rate)
+WeibullSurv(shape, scale)
+GompertzSurv(shape, rate)
+LogNormalSurv(mu, sigma)
+LogLogisticSurv(shape, scale)
+GammaSurv(shape, rate)
+GenGammaSurv(mu, sigma, Q)
+```
+
+Plus flexible M-spline hazard models via `make_knots()` and `mspline_basis()`.
+
+## API Reference
+
+### Data Setup
+- `set_agd_arm()` - Arm-based aggregate data
+- `set_agd_contrast()` - Contrast-based aggregate data
+- `set_ipd()` - Individual patient data
+- `combine_network()` - Combine multiple data sources
+
+### Model Fitting
+- `nma()` - Fit NMA/ML-NMR model
+
+### Post-Processing
+- `relative_effects()` - Pairwise treatment comparisons
+- `nma_predict()` - Absolute effect predictions
+- `posterior_ranks()` - Treatment rankings
+- `posterior_rank_probs()` - Rank probabilities and SUCRA
+- `dic()` - Deviance Information Criterion
+- `marginal_effects()` - Population-average effects
+
+### Network Analysis
+- `is_network_connected()` - Check connectivity
+- `has_direct()` / `has_indirect()` - Evidence type
+- `get_nodesplits()` - Identify node-split comparisons
+- `to_graph()` - Convert to Graphs.jl graph
+
+### Visualization
+- `plot_network()` - Network graph
+- `plot_forest()` - Forest plot
+- `plot_rank_probs()` - Rank probability heatmap
+- `plot_dic()` - Residual deviance plot
+
+## Comparison with R multinma
+
+| Feature | R multinma | multinma.jl |
+|---------|-----------|-------------|
+| Language | R + Stan | Julia + Stan |
+| Stan interface | rstan/cmdstanr | CmdStan via shell |
+| Data manipulation | dplyr/tidyr | DataFrames.jl |
+| Plotting | ggplot2/ggdist | Makie.jl |
+| Factors | forcats | CategoricalArrays.jl |
+| Network graphs | igraph/ggraph | Graphs.jl/GraphMakie.jl |
+| Splines | splines2 | BSplineKit.jl |
+| Quasi-MC | randtoolbox | QuasiMonteCarlo.jl |
+| API style | S3 methods | Multiple dispatch |
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
+- Phillippo DM, Dias S, Ades AE, Belger M, Brnabic A, Schacht A, et al. Multilevel network meta-regression for population-adjusted treatment comparisons. *JRSS-A*. 2020;183(3):1189-1210.
+- Phillippo DM. multinma: Bayesian Network Meta-Analysis of Individual and Aggregate Data. R package.
+- Dias S, Welton NJ, Sutton AJ, Ades AE. NICE DSU Technical Support Documents 2-7.
 
-<div id="ref-Carpenter2017" class="csl-entry">
+## License
 
-Carpenter, B., A. Gelman, M. D. Hoffman, D. Lee, B. Goodrich, M.
-Betancourt, M. Brubaker, J. Guo, P. Li, and A. Riddell. 2017. “Stan: A
-Probabilistic Programming Language.” *Journal of Statistical Software*
-76 (1). <https://doi.org/10.18637/jss.v076.i01>.
-
-</div>
-
-<div id="ref-Phillippo_thesis" class="csl-entry">
-
-Phillippo, D. M. 2019. “Calibration of Treatment Effects in Network
-Meta-Analysis Using Individual Patient Data.” PhD thesis, University of
-Bristol.
-
-</div>
-
-<div id="ref-methods_paper" class="csl-entry">
-
-Phillippo, D. M., S. Dias, A. E. Ades, M. Belger, A. Brnabic, A.
-Schacht, D. Saure, Z. Kadziola, and N. J. Welton. 2020. “Multilevel
-Network Meta-Regression for Population-Adjusted Treatment Comparisons.”
-*Journal of the Royal Statistical Society: Series A (Statistics in
-Society)* 183 (3): 1189–1210. <https://doi.org/10.1111/rssa.12579>.
-
-</div>
-
-</div>
+GPL-3.0. See [LICENSE](LICENSE) for details.

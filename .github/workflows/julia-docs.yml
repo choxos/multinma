@@ -3,11 +3,12 @@ name: Documentation
 on:
   push:
     branches:
+      - main
       - julia-port
     tags: ['*']
   pull_request:
     branches:
-      - julia-port
+      - main
 
 permissions:
   contents: write
@@ -23,17 +24,17 @@ jobs:
           version: '1.10'
       - name: Install dependencies
         run: |
-          julia --project=multinma.jl -e '
+          julia --project=. -e '
             using Pkg
             Pkg.instantiate()
           '
-          julia --project=multinma.jl/docs -e '
+          julia --project=docs -e '
             using Pkg
-            Pkg.develop(PackageSpec(path="multinma.jl"))
+            Pkg.develop(PackageSpec(path="."))
             Pkg.instantiate()
           '
       - name: Build and deploy documentation
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-        run: julia --project=multinma.jl/docs multinma.jl/docs/make.jl
+        run: julia --project=docs docs/make.jl

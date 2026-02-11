@@ -3,10 +3,11 @@ name: Julia CI
 on:
   push:
     branches:
+      - main
       - julia-port
   pull_request:
     branches:
-      - julia-port
+      - main
 
 jobs:
   test:
@@ -22,8 +23,8 @@ jobs:
           version: ${{ matrix.julia-version }}
       - uses: julia-actions/cache@v2
       - name: Install dependencies
-        run: julia --project=multinma.jl -e 'using Pkg; Pkg.instantiate()'
+        run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
       - name: Run unit tests
-        run: julia --project=multinma.jl -e 'using Pkg; Pkg.test()'
+        run: julia --project=. -e 'using Pkg; Pkg.test()'
       - name: Run vignette comparison tests
-        run: julia --project=multinma.jl multinma.jl/test/vignette_comparison.jl
+        run: julia --project=. test/vignette_comparison.jl
