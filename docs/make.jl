@@ -19,7 +19,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/choxos/multinma.git",
-    devbranch = "main",
-    dirname = "",
+    devbranch = "julia-port",
     push_preview = true,
 )
