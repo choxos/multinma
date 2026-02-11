@@ -1,0 +1,49 @@
+"studyn","studyc","trtn","trtc","r","n","time"
+1,"MRC-E",1,"Diuretic",43,1081,5.8
+1,"MRC-E",2,"Placebo",34,2213,5.8
+1,"MRC-E",3,"Beta Blocker",37,1102,5.8
+2,"EWPH",1,"Diuretic",29,416,4.7
+2,"EWPH",2,"Placebo",20,424,4.7
+3,"SHEP",1,"Diuretic",140,1631,3
+3,"SHEP",2,"Placebo",118,1578,3
+4,"HAPPHY",1,"Diuretic",75,3272,3.8
+4,"HAPPHY",3,"Beta Blocker",86,3297,3.8
+5,"ALLHAT",1,"Diuretic",302,6766,4
+5,"ALLHAT",4,"CCB",154,3954,4
+5,"ALLHAT",5,"ACE Inhibitor",119,4096,4
+6,"INSIGHT",1,"Diuretic",176,2511,3
+6,"INSIGHT",4,"CCB",136,2508,3
+7,"ANBP-2",1,"Diuretic",200,2826,4.1
+7,"ANBP-2",5,"ACE Inhibitor",138,2800,4.1
+8,"ALPINE",1,"Diuretic",8,196,1
+8,"ALPINE",6,"ARB",1,196,1
+9,"FEVER",2,"Placebo",154,4870,3.3
+9,"FEVER",4,"CCB",177,4841,3.3
+10,"DREAM",2,"Placebo",489,2646,3
+10,"DREAM",5,"ACE Inhibitor",449,2623,3
+11,"HOPE",2,"Placebo",155,2883,4.5
+11,"HOPE",5,"ACE Inhibitor",102,2837,4.5
+12,"PEACE",2,"Placebo",399,3472,4.8
+12,"PEACE",5,"ACE Inhibitor",335,3432,4.8
+13,"CHARM",2,"Placebo",202,2721,3.1
+13,"CHARM",6,"ARB",163,2715,3.1
+14,"SCOPE",2,"Placebo",115,2175,3.7
+14,"SCOPE",6,"ARB",93,2167,3.7
+15,"AASK",3,"Beta Blocker",70,405,3.8
+15,"AASK",4,"CCB",32,202,3.8
+15,"AASK",5,"ACE Inhibitor",45,410,3.8
+16,"STOP-2",3,"Beta Blocker",97,1960,4
+16,"STOP-2",4,"CCB",95,1965,4
+16,"STOP-2",5,"ACE Inhibitor",93,1970,4
+17,"ASCOT",3,"Beta Blocker",799,7040,5.5
+17,"ASCOT",4,"CCB",567,7072,5.5
+18,"NORDIL",3,"Beta Blocker",251,5059,4.5
+18,"NORDIL",4,"CCB",216,5095,4.5
+19,"INVEST",3,"Beta Blocker",665,8078,4
+19,"INVEST",4,"CCB",569,8098,4
+20,"CAPPP",3,"Beta Blocker",380,5230,6.1
+20,"CAPPP",5,"ACE Inhibitor",337,5183,6.1
+21,"LIFE",3,"Beta Blocker",320,3979,4.8
+21,"LIFE",6,"ARB",242,4020,4.8
+22,"VALUE",4,"CCB",845,5074,4.2
+22,"VALUE",6,"ARB",690,5087,4.2

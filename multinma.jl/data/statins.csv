@@ -1,0 +1,39 @@
+"studyn","studyc","trtn","trtc","prevention","r","n"
+1,"4S",1,"Placebo","Secondary",256,2223
+1,"4S",2,"Statin","Secondary",182,2221
+2,"Bestehorn",1,"Placebo","Secondary",4,125
+2,"Bestehorn",2,"Statin","Secondary",1,129
+3,"Brown",1,"Placebo","Secondary",0,52
+3,"Brown",2,"Statin","Secondary",1,94
+4,"CCAIT",1,"Placebo","Secondary",2,166
+4,"CCAIT",2,"Statin","Secondary",2,165
+5,"Downs",1,"Placebo","Primary",77,3301
+5,"Downs",2,"Statin","Primary",80,3304
+6,"EXCEL",1,"Placebo","Primary",3,1663
+6,"EXCEL",2,"Statin","Primary",33,6582
+7,"Furberg",1,"Placebo","Secondary",8,459
+7,"Furberg",2,"Statin","Secondary",1,460
+8,"Haskell",1,"Placebo","Secondary",3,155
+8,"Haskell",2,"Statin","Secondary",3,145
+9,"Jones",1,"Placebo","Secondary",0,42
+9,"Jones",2,"Statin","Secondary",1,83
+10,"KAPS",1,"Placebo","Primary",4,223
+10,"KAPS",2,"Statin","Primary",3,224
+11,"LIPID",1,"Placebo","Secondary",633,4520
+11,"LIPID",2,"Statin","Secondary",498,4512
+12,"MARS",1,"Placebo","Secondary",1,124
+12,"MARS",2,"Statin","Secondary",2,123
+13,"MAAS",1,"Placebo","Secondary",11,188
+13,"MAAS",2,"Statin","Secondary",4,193
+14,"PLAC 1",1,"Placebo","Secondary",5,78
+14,"PLAC 1",2,"Statin","Secondary",4,79
+15,"PLAC 2",1,"Placebo","Secondary",6,202
+15,"PLAC 2",2,"Statin","Secondary",4,206
+16,"PMSGCRP",1,"Placebo","Primary",3,532
+16,"PMSGCRP",2,"Statin","Primary",0,530
+17,"Riegger",1,"Placebo","Secondary",4,178
+17,"Riegger",2,"Statin","Secondary",2,187
+18,"Weintraub",1,"Placebo","Secondary",1,201
+18,"Weintraub",2,"Statin","Secondary",3,203
+19,"Wscotland",1,"Placebo","Primary",135,3293
+19,"Wscotland",2,"Statin","Primary",106,3305

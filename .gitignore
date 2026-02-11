@@ -15,3 +15,8 @@ vignettes/*_files
 inst/*.bib.*
 inst/doc
 docs
+!multinma.jl/docs/
+multinma.jl/docs/build/
+multinma.jl/docs/Manifest.toml
+multinma.jl/Manifest.toml
+multinma.jl/.DS_Store

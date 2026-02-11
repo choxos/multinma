@@ -1,0 +1,10 @@
+treatments: No intervention|Group counselling|Individual counselling|Self-help 
+n_treatments: 4 
+n_studies: 24 
+reference: No intervention 
+n_nodesplits: 2 
+nodesplits:
+   1 vs 1 
+   2 vs 3 
+likelihood: binomial_1par 
+link: logit 

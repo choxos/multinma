@@ -1,0 +1,64 @@
+"studyc","studyn","trtc","trtn","trt_class","r","n","E","stroke","year","followup"
+"ACTIVE-W",1,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",65,3371,4200,0.15,2006,1.3
+"ACTIVE-W",1,"Low dose aspirin + copidogrel",16,"Anti-platelet",106,3335,4180,0.15,2006,1.3
+"AFASAK 1",2,"Placebo/Standard care",1,"Control",19,336,398,0.06,1989,1.2
+"AFASAK 1",2,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",9,335,413,0.06,1989,1.2
+"AFASAK 1",2,"Low dose aspirin",5,"Anti-platelet",16,336,409,0.06,1989,1.2
+"AFASAK 2",3,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",11,170,355,0.1,1998,2.2
+"AFASAK 2",3,"Fixed dose warfarin",4,"Anti-coagulant",14,167,363,0.1,1998,2.2
+"AFASAK 2",3,"Medium dose aspirin",6,"Anti-platelet",9,169,365,0.1,1998,2.2
+"AFASAK 2",3,"Fixed dose warfarin + medium dose aspirin",14,"Mixed",11,171,377,0.1,1998,2.2
+"BAATAF",4,"Placebo/Standard care",1,"Control",13,208,435,0.03,1990,2.2
+"BAATAF",4,"Low adjusted dose anti-coagulant",2,"Anti-coagulant",3,212,487,0.03,1990,2.2
+"BAFTA",5,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",21,488,720.9,0.13,2007,2.7
+"BAFTA",5,"Low dose aspirin",5,"Anti-platelet",44,485,712.8,0.13,2007,2.7
+"CAFA",6,"Placebo/Standard care",1,"Control",9,191,241,0.04,1991,1.3
+"CAFA",6,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",6,87,237,0.04,1991,1.3
+"Chinese ATAFS",7,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",9,335,530,0.19,2006,1.6
+"Chinese ATAFS",7,"Low dose aspirin",5,"Anti-platelet",17,369,583,0.19,2006,1.6
+"EAFT",8,"Placebo/Standard care",1,"Control",50,214,405,1,1993,2.3
+"EAFT",8,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",20,225,507,1,1993,2.3
+"EAFT",8,"Medium dose aspirin",6,"Anti-platelet",88,404,853,1,1993,2.3
+"ESPS 2",9,"Placebo/Standard care",1,"Control",23,107,111,1,1997,1.2
+"ESPS 2",9,"Low dose aspirin",5,"Anti-platelet",17,104,123,1,1997,1.2
+"ESPS 2",9,"Dipyridamole",12,"Anti-platelet",20,114,133,1,1997,1.2
+"ESPS 2",9,"Low dose aspirin + dipyridamole",17,"Anti-platelet",14,104,127,1,1997,1.2
+"JAST",10,"Placebo/Standard care",1,"Control",19,445,935,0.03,2006,2.1
+"JAST",10,"Low dose aspirin",5,"Anti-platelet",20,426,895,0.03,2006,2.1
+"JNAFESP",11,"Low adjusted dose anti-coagulant",2,"Anti-coagulant",2,60,116,1,2000,1.8
+"JNAFESP",11,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",2,55,91,1,2000,1.8
+"LASAF",12,"Placebo/Standard care",1,"Control",3,91,135,0,1999,1.5
+"LASAF",12,"Low dose aspirin",5,"Anti-platelet",4,104,145,0,1999,1.5
+"LASAF",12,"Alternate day aspirin",8,"Anti-platelet",1,90,148,0,1999,1.5
+"MWNAF",13,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",1,153,182,0,1998,1.2
+"MWNAF",13,"Fixed dose warfarin",4,"Anti-coagulant",5,150,183,0,1998,1.2
+"NASPEAF",14,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",6,237,556,0,2004,2.3
+"NASPEAF",14,"Triflusal",10,"Anti-platelet",11,242,576,0,2004,2.3
+"NASPEAF",14,"Acenocoumarol",15,"Mixed",3,235,541,0,2004,2.3
+"PATAF",15,"Low adjusted dose anti-coagulant",2,"Anti-coagulant",4,122,361,0,1999,2.7
+"PATAF",15,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",3,131,401,0,1999,2.7
+"PATAF",15,"Low dose aspirin",5,"Anti-platelet",4,141,392,0,1999,2.7
+"SAFT",16,"Placebo/Standard care",1,"Control",41,334,919,0,2003,2.8
+"SAFT",16,"Fixed dose warfarin + low dose aspirin",13,"Mixed",32,334,919,0,2003,2.8
+"SIFA",17,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",18,454,450,1,1997,1
+"SIFA",17,"Indobufen",11,"Anti-platelet",23,462,460,1,1997,1
+"SPAF 1",18,"Placebo/Standard care",1,"Control",19,211,245,0.08,1991,1.3
+"SPAF 1",18,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",8,210,263,0.08,1991,1.3
+"SPAF 1",18,"Medium dose aspirin",6,"Anti-platelet",25,552,723,0.08,1991,1.3
+"SPAF 2a",19,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",19,358,1099,0.06,1994,2.8
+"SPAF 2a",19,"Medium dose aspirin",6,"Anti-platelet",21,357,1083,0.06,1994,2.8
+"SPAF 2b",20,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",20,197,394,0.09,1994,2.8
+"SPAF 2b",20,"Medium dose aspirin",6,"Anti-platelet",21,188,377,0.09,1994,2.8
+"SPAF 3",21,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",14,523,581,0.38,1996,1.1
+"SPAF 3",21,"Fixed dose warfarin + medium dose aspirin",14,"Mixed",48,521,558,0.38,1996,1.1
+"SPINAF",22,"Placebo/Standard care",1,"Control",23,290,483,0.08,1992,1.7
+"SPINAF",22,"Low adjusted dose anti-coagulant",2,"Anti-coagulant",7,281,489,0.08,1992,1.7
+"SPORTIF 3",23,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",58,1703,2440,0.24,2003,1.4
+"SPORTIF 3",23,"Ximelagatran",9,"Anti-coagulant",42,1704,2446,0.24,2003,1.4
+"SPORTIF 5",24,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",44,1962,3212,0.19,2005,1.6
+"SPORTIF 5",24,"Ximelagatran",9,"Anti-coagulant",52,1960,3193,0.19,2005,1.6
+"UK-TIA",25,"Placebo/Standard care",1,"Control",4,15,60,1,1991,4
+"UK-TIA",25,"Medium dose aspirin",6,"Anti-platelet",3,13,52,1,1991,4
+"UK-TIA",25,"High dose aspirin",7,"Anti-platelet",5,21,84,1,1991,4
+"WASPO",26,"Standard adjusted dose anti-coagulant",3,"Anti-coagulant",0,36,36,0,2007,1
+"WASPO",26,"Medium dose aspirin",6,"Anti-platelet",0,39,39,0,2007,1

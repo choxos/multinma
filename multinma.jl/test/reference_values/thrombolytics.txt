@@ -1,0 +1,10 @@
+treatments: SK|Acc t-PA|ASPAC|PTCA|r-PA|SK + t-PA|t-PA|TNK|UK 
+n_treatments: 9 
+n_studies: 50 
+reference: SK 
+n_nodesplits: 2 
+nodesplits:
+   1 vs 1 
+   2 vs 3 
+likelihood: binomial_1par 
+link: logit 

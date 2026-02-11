@@ -1,0 +1,6 @@
+treatments: Control|Beta Blocker 
+n_treatments: 2 
+n_studies: 22 
+reference: Control 
+likelihood: binomial_1par 
+link: logit 

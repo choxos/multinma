@@ -1,0 +1,6 @@
+treatments: Beta Blocker|ACE Inhibitor|ARB|CCB|Diuretic|Placebo 
+n_treatments: 6 
+n_studies: 22 
+reference: Beta Blocker 
+likelihood: binomial_1par 
+link: logit 

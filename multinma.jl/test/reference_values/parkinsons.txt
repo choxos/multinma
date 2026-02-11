@@ -1,0 +1,12 @@
+arm_treatments: 4|1|2|3|5 
+arm_n_treatments: 5 
+arm_n_studies: 7 
+arm_reference: 4 
+contr_treatments: 4|1|2|3|5 
+contr_n_treatments: 5 
+contr_n_studies: 7 
+mix_treatments: 4|1|2|3|5 
+mix_n_treatments: 5 
+mix_n_studies: 7 
+arm_likelihood: normal 
+arm_link: identity 
